@@ -104,6 +104,30 @@ export default class ReferenceList extends Plugin {
       },
     });
 
+    this.addCommand({
+      id: 'refresh-cached-repository',
+      name: t('Refresh cached repository'),
+      callback: async () => {
+        const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
+        if (activeView) {
+          const file = activeView.file;
+
+          if (this.bibManager.fileCache.has(file)) {
+            const cache = this.bibManager.fileCache.get(file);
+            if (cache.source !== this.bibManager) {
+              this.bibManager.fileCache.delete(file);
+              this.processReferences();
+              return;
+            }
+          }
+        }
+
+        this.bibManager.reinit(true);
+        await this.bibManager.initPromise.promise;
+        this.processReferences();
+      },
+    });
+
     document.body.toggleClass(
       'pwc-tooltips',
       !!this.settings.showCitekeyTooltips
