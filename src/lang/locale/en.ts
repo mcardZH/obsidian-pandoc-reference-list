@@ -78,6 +78,7 @@ export default {
 
   // src/main.ts
   'Show reference list': 'Show reference list',
+  'Refresh cached repository': 'Refresh cached repository',
 
   // src/view.ts
   'Open literature note': 'Open literature note',
